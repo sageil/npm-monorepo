@@ -1,0 +1,12 @@
+# Generated files
+
+package-lock.json
+node_modules
+dist
+
+# Packages
+/packages
+/services
+/apps
+/tools
+*.ts

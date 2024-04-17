@@ -1,0 +1,13 @@
+steps:
+  - script: |
+     npm install --global @cyclonedx/cyclonedx-npm --no-fund 
+     cyclonedx-npm --version
+     cyclonedx-npm --omit 'dev' --output-format 'JSON' --output-file '$(Agent.TempDirectory)/sbom.json'
+    displayName: Generate SBOM
+  - script: |
+     curl -X "POST" 'http://mbp.local:8081/api/v1/bom' \
+     -H 'Content-Type:multipart/form-data' \
+     -H 'X-Api-Key:odt_k2l7EUInKENkujYYQOP0gx3ZBEgZ7gOz' \
+     -F 'project=a44cffd6-dee1-4128-be71-fd2f1e567253' \
+     -F 'bom=@$(Agent.TempDirectory)/sbom.json'
+    displayName: Upload SBOM to Dependency Track

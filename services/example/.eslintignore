@@ -1,0 +1,21 @@
+# Generated files
+
+package-lock.json
+node_modules
+dist
+coverage/**/*
+
+
+**/**/*.cjs
+**/**/*.js
+
+**/package.json
+**/turbo.json
+**/tools/**
+**/pipelines/**
+
+/.eslintrc.cjs
+**/.lintstagedrc.cjs
+**/build.js
+**/dev.cjs
+**/jest.config.cjs

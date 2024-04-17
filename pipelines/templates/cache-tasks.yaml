@@ -1,0 +1,47 @@
+parameters:
+  - name: node_version
+    default: 20.11.0
+
+steps:
+  - task: UseNode@1
+    displayName: Install Node
+    inputs:
+      version: "${{ parameters.node_version }}"
+  - script: echo $(turbo_cache_path)
+
+  - task: Cache@2
+    displayName: Cache Turbo
+    continueOnError: true
+    inputs:
+      key: '"turbo" | "$(Agent.OS)" | "$(Build.SourceBranch)" | "$(Build.SourceVersion)"'
+      # the keys are set up to first try the current branch or try to fetch main otherwise, to use main branch cache for feature branches
+      restoreKeys: |
+        "turbo" | "$(Agent.OS)" | "$(Build.SourceBranch)"
+        "turbo" | "$(Agent.OS)" | "main"
+        "turbo" | "$(Agent.OS)"
+        "turbo"
+      path: $(turbo_cache_path) 
+
+  # - task: Cache@2
+  #   inputs:
+  #     key: npm | "$(Agent.OS)" | package-lock.json
+  #     restoreKeys: |
+  #      npm | "$(Agent.OS)"
+  #     path: $(npm_config_cache)
+  #     cacheHitVar: CACHE_RESTORED
+  #   displayName: Cache npm
+
+  - task: Npm@1
+    displayName: "Install the dependencies"
+    inputs:
+      command: custom
+      workingDirectory: $(Build.SourcesDirectory)
+      customCommand: install --prefer-offline --no-audit --no-fund --ignore-scripts
+      verbose: false
+    #condition: ne(variables.CACHE_RESTORED, 'true')
+
+
+  - script: |
+      find  $(turbo_cache_path) -mmin +50 -type f -delete | true 
+    displayName: Clean cache older than 10 minutes
+    continueOnError: true

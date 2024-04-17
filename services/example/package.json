@@ -1,0 +1,29 @@
+{
+  "name": "@services/example",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "./dist/index.csj",
+  "scripts": {
+    "build": "node build.js",
+    "prod": "npm --filter=@services/example --prod deploy ../../production-deployments/example-prod/",
+    "lint": "eslint -c ./.eslintrc.cjs src/**/*.ts",
+    "start": "node ./dist/index.cjs",
+    "dev": "nodemon",
+    "lint-fix": "npm run lint --fix",
+    "format": "prettier --check .",
+    "format-fix": "prettier --write .",
+    "test": "jest --passWithNoTests --detectOpenHandles --forceExit --coverage --coverageReporters=cobertura",
+    "docs": "typedoc --options typedoc.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@packages/common": "^1.0.0",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@repo/tools": "^1.0.0"
+  }
+}

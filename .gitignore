@@ -1,0 +1,23 @@
+node_modules
+dist
+.DS_Store
+
+# Typescript
+*.tsbuildinfo
+
+
+# Turborepo
+.turbo
+.cache
+# Jest
+coverage
+.coverage
+
+# Env files
+.env*
+!.env.example
+production-deployments
+docs
+.task
+out
+.turbo-cache

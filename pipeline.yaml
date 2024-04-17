@@ -1,0 +1,27 @@
+# Build numbering format
+name: $(BuildID)
+
+trigger:
+  tags:
+    include:
+      - release.*
+pr:
+  branches:
+    include:
+      - refs/tags/release.*
+  # paths:
+  #   exclude:
+  #     - "*"
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - script: |
+      echo "Hello from '/' root folder1."
+    displayName: 'Hello from Root'
+  - script: |
+      echo "Hello from '/' root folder2."
+    displayName: 'Conditional Hello from Root'
+    continueOnError: false
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))

@@ -1,0 +1,49 @@
+trigger:
+  - none
+resources:
+  pipelines:
+    - pipeline: "deploy-npm-template"
+      project: "Demo" # the project name
+      source: "npm-template-build" # the name of the pipeline triggering this one
+      branch: "main"
+      trigger: true
+stages:
+  - stage: "deploy"
+    displayName: "Deploy npm template"
+    pool:
+      name: DemoPool
+    jobs:
+      - deployment: "DemoEnv_Deployment"
+        displayName: "npm template"
+        environment:
+          name: "DemoEnv"
+          resourceName: allien
+          resourceType: virtualMachine
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: "none"
+                #- download: "deploy-npm-template"
+                #name: "Download_Build_Artifacts"
+                #displayName: "Download Build Artifacts"
+                #artifact: "exampleService"
+                - download: none
+                - task: DownloadPipelineArtifact@2
+                  displayName: "Download Build Artifacts"
+                  inputs:
+                    buildType: "specific"
+                    definition: "npm-template-build"
+                    specificBuildWithTriggering: true
+                    buildVersionToDownload: "latest"
+                    project: "Demo"
+                    patterns: "**/*.zip"
+                    artifactName: "sample_service"
+                    path: "$(Pipeline.Workspace)"
+                - task: ExtractFiles@1
+                  inputs:
+                    archiveFilePatterns: "$(Pipeline.Workspace)/sample_service/*.zip" # string. Required. Archive file patterns. Default: **/*.zip.
+                    destinationFolder: code # string. Required. Destination folder.
+                    cleanDestinationFolder: true # boolean. Clean destination folder before extracting. Default: true.
+                    overwriteExistingFiles: true # boolean. Overwrite existing files. Default: false.
+                    #pathToSevenZipTool: # string. Path to 7z utility.

@@ -1,0 +1,8 @@
+variables: 
+  npm_config_cache: $(Pipeline.Workspace)/.npm
+  turbo_cache_path: $(Pipeline.Workspace)/.turbo-cache 
+
+  CI: true
+  TURBO_TELEMETRY_DISABLED: 1
+  # NPM_CACHED: false
+  #NODE_ENV: production

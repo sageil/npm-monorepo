@@ -1,0 +1,17 @@
+steps:
+  - task: UseDotNet@2
+    inputs:
+      version: 7.0.x
+  - task: reportgenerator@5
+    inputs:
+      reports: '$(Build.SourcesDirectory)/**/**/coverage/cobertura-coverage.xml'
+      targetdir: '$(Build.SourcesDirectory)/CoverageResults'
+
+  - task: PublishCodeCoverageResults@1
+    displayName: 'Publish code coverage'
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: '$(Build.SourcesDirectory)/CoverageResults/Cobertura.xml'
+      reportDirectoryName: CoverageResults
+      reportDirectoryPath: $(Build.SourcesDirectory)/CoverageResults
+      reportDirectory: $(Build.SourcesDirectory)/CoverageResults

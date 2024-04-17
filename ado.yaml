@@ -1,0 +1,75 @@
+# Build numbering format
+variables:
+  - template: ./pipelines/templates/cache-vars.yaml
+  - name: Service_Directory
+    value: $(System.DefaultWorkingDirectory)/services/example
+  - name: disable.coverage.autogenerate
+    value: "true"
+  - name: ServiceFilter
+    value: --filter=@services/example --cache-dir=$(turbo_cache_path)
+trigger: none
+pr:
+  branches:
+    include:
+      - main
+  # paths:
+  #   include:
+  #     - services/example
+
+pool:
+  name: DemoPool
+stages:
+  - stage: "Build"
+    displayName: "Build the web application"
+    jobs:
+      - job: "Build"
+        displayName: "Build job"
+        steps:
+          - script: mkdir -p $(Pipeline.Workspace)/.npm
+            displayName: "Create npm cache directory"
+          - template: ./pipelines/templates/cache-tasks.yaml
+            parameters:
+              node_version: 20.11.0
+
+          - script: |
+              npm i -g turbo
+              turbo run build $(ServiceFilter)
+              turbo run lint $(ServiceFilter)
+              turbo run test $(ServiceFilter)
+            displayName: "Build example services $(Build.BuildID)-$(Service_Directory)"
+
+          - task: Npm@1
+            displayName: "NPM CI"
+            inputs:
+              command: custom
+              workingDirectory: $(Build.SourcesDirectory)
+              verbose: false
+              customCommand: "ci --omit=dev --no-audit --ignore-scripts --no-fund"
+            #condition: ne(variables.CACHE_RESTORED, 'true')
+
+          - template: ./pipelines/templates/coverage-tasks.yaml
+          - template: ./pipelines/templates/sbom-gen.yaml
+          #- template: ./pipelines/templates/deploy-tasks.yaml
+          - task: CopyFiles@2
+            displayName: "Copy build artifacts"
+            inputs:
+              SourceFolder: $(Build.SourcesDirectory)
+              Contents: |
+                services/example/dist/**
+                **/node_modules/**
+                services/example/package.json
+              targetFolder: "$(Agent.TempDirectory)/build-artifacts"
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: "$(Agent.TempDirectory)/build-artifacts"
+              includeRootFolder: false
+              archiveType: zip
+              archiveFile: $(Pipeline.Workspace)/build-artifacts.zip
+
+          - task: PublishPipelineArtifact@1
+            displayName: "Publish pipeline artifacts"
+            inputs:
+              targetPath: "$(Pipeline.Workspace)/build-artifacts.zip"
+              artifact: "sample_service"
+              parallel: true
+              publishLocation: "pipeline"

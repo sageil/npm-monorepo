@@ -1,0 +1,51 @@
+{
+  "name": "npm-monorepo",
+  "version": "1.0.0",
+  "description": "npm-monorepo",
+  "scripts": {
+    "build": "turbo run build",
+    "prod": "npm clean:prod && turbo run --parallel prod",
+    "clean:prod": "rimraf ./production-deployments/**",
+    "dev": "turbo run dev",
+    "start": "turbo run start",
+    "lint-format": "turbo run --parallel lint format ",
+    "lint-format:fix": "turbo run --parallel lint-fix format-fix",
+    "lint-all": "turbo run --parallel lint",
+    "lint-fix": "turbo run --parallel lint-fix",
+    "format-all": "turbo run --parallel format",
+    "format-fix": "prettier --write .",
+    "test": "turbo run test",
+    "prepare": "husky",
+    "clean": "rimraf ./.cache ./.turbo ./.out ./.tsbuildinfo",
+    "docs": "typedoc",
+    "viewdocs": "npx live-server --port=57208 --open=./docs --root=./--ignore=.git"
+  },
+  "workspaces": [
+    "./tools/",
+    "./packages/*",
+    "./services/*",
+    "./apps/*"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@compodoc/live-server": "^1.2.3",
+    "@jest/globals": "^29.7.0",
+    "@swc/core": "^1.4.14",
+    "@swc/jest": "^0.2.36",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.7",
+    "@typescript-eslint/eslint-plugin": "^7.7.0",
+    "esbuild-node-tsc": "^2.0.5",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.0.11",
+    "jest": "^29.7.0",
+    "lint-staged": "^15.2.2",
+    "nodemon": "^3.1.0",
+    "prettier": "^3.2.5",
+    "rimraf": "^5.0.5",
+    "turbo": "^1.13.2",
+    "typedoc": "^0.25.13",
+    "typescript": "^5.4.5"
+  }
+}
