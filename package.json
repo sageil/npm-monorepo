@@ -23,8 +23,7 @@
   "workspaces": [
     "./tools/",
     "./packages/*",
-    "./services/*",
-    "./apps/*"
+    "./services/*"
   ],
   "author": "",
   "license": "ISC",
