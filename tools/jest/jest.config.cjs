@@ -3,6 +3,7 @@ module.exports = {
   testMatch: ["<rootDir>/src/**/*.spec.ts"],
   testPathIgnorePatterns: ["/node_modules/"],
   bail: true,
+  forceExit: true,
 
   transform: {
     "^.+\\.(t)sx?$": "@swc/jest",

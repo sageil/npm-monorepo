@@ -14,7 +14,7 @@ coverage
 .coverage
 
 # Env files
-.env*
+.prod.env
 !.env.example
 production-deployments
 docs

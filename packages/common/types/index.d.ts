@@ -7,5 +7,5 @@
  */
 export declare function doSomething(): DoerInt;
 export interface DoerInt {
-  canDo: true;
+    canDo: true;
 }

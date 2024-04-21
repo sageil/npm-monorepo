@@ -3,19 +3,17 @@
  * @packageDocumentation
  */
 import { doSomething } from '@packages/common';
+import type { Request, Response } from 'express';
+import { app } from './server';
 doSomething();
 
-import type { Application, Request, Response } from 'express';
-import express from 'express';
-const app: Application = express();
-
+const PORT = process.env.PORT ?? 5001;
 app.get('/', (_: Request, res: Response) => {
   res.send('Built with Typescript, NPM, and Esbuild.');
 });
-
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-  console.log('Visit http://localhost:3000/');
+app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
+  console.log(`Visit http://localhost:${PORT}/`);
 });
 const fn = () => {
   return 'hello';

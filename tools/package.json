@@ -27,6 +27,7 @@
   "devDependencies": {
     "@jest/globals": "^29.7.0",
     "@jgoz/esbuild-plugin-typecheck": "^3.1.1",
+    "dotenv-cli": "^7.4.1",
     "esbuild": "^0.20.2",
     "esbuild-plugin-tsc": "^0.4.0",
     "eslint": "^9.0.0",
