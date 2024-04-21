@@ -9,6 +9,7 @@ module.exports = {
     platform: "node",
     packages: "external",
     sourcemap: true,
+    bundle:true
    
   },
 
