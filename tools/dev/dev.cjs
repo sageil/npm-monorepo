@@ -3,14 +3,12 @@ const typecheckPlugin =
   
 module.exports = {
   esbuild: {
-   
     minify: false,
     format: "cjs",
     platform: "node",
     packages: "external",
     sourcemap: true,
     bundle:true
-   
   },
 
   prebuild: async () => {
