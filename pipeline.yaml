@@ -14,14 +14,14 @@ pr:
   #     - "*"
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-latest"
 
 steps:
   - script: |
       echo "Hello from '/' root folder1."
-    displayName: 'Hello from Root'
+    displayName: "Hello from Root"
   - script: |
       echo "Hello from '/' root folder2."
-    displayName: 'Conditional Hello from Root'
+    displayName: "Conditional Hello from Root"
     continueOnError: false
     condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
